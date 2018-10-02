@@ -1,0 +1,58 @@
+1 - Criar um ambiente virtual ou usar um já criado
+2 - Acessar o ambiente virtual e ativá-lo com o comando Scripts\activate.bat
+3 - Instalr o Django com 'pipi install Django'
+4 - Criar um projeto com o comando 'django-admin.py startproject testemysql'
+5 - Acessar a raíz do projeto e criar um app com 'python manage.py startapp myapp'
+6 - Mover o novo app para a pasta 'testemysql/testemysql'
+7 - Em settings.py adicionar o caminho 'testemysql.myapp' na lista INSTALLED_APPS 
+8 - Editar o arquivo urls.py para apontar para o app myapp
+ 	Quando uma requisição http for disparada o django vai ler o arquivo testemysql/urls para saber quem vai tratar essa requisição. No nosso caso, queremos que quando a requisição for para a url 'myapp/' ela seja direcionado para o aquivo de urls do myapp 'testemysql.myapp.urls', dessa forma, adicionamos a seguinte linha na lista de urlpatterns do arquivo 'testemysql/ursl':
+ 	"path('myapp/', include('testemysql.myapp.urls', namespace='myapp'))
+
+ 9 - Em myapp/urls importamos a views do myapp com a seguinte linha:
+ 	'from  testemysql.myapp import views'
+ 10 - Definimos o nome do app com a linha: 'app_name = 'myapp'
+ 	No caso em que desejamos que uma requisição para a raíz do myapp (myapp/) seja respondida adicionamos a seguinte linha na lista de urlpatterns:
+ 	'path('', views.home, name='home')'
+ 	A linha acima determina que uma requisição para a raiz de myapp (myapp/) será tratada pela função home() definida na views do myapp
+
+11 - Criar uma classe de modelo
+12 - Acessar a raís do projeto pelo terminal e executar os segintes comandos na order que segue: 'python manage.py mekemigrations testemysql'; 'python manage.py migrate'
+	O comando 12 vai criar no banco de dados as tabelas de modelo do app. Por padrão, um projeto Django vem configurado para persistir no SQLite não havendo necessidade de qualquer configuração extra. Quando o comando da etapa 12 é executado, o banco SQLite é criado na raíz do projeto com um nome similar a: 'db.sqlite3'
+
+
+
+############################# DJANGO COM POSTGRES ##################################
+1 - CRIAR UM VIRTUALENV
+2 - INSTALAR psycopg2 COM O COMANDO 	'pip install psycopg2 django'
+3 - EXECUTAR O COMANDO pip freeze PARA VISUALIZAR AS DEPENDENCIAS DO VENV
+4 - CRIAR O ARQUIVO 'requiriments.txt' NA VENV
+5 - CRIAR UM PROJETO 'django-admin.py startproject nome_projeto'
+6 - ACESSAR A PASTA DO PROJETO
+7 - CRIAR UM APP 'python manage.py startapp nome_app'
+8 - MOVER A PASTA DO APP PARA DENTRO DO PROJETO
+9 - MOVER O models.py PARA A RAÍZ PROJETO (myproject/myproject)
+10- ADICIONAR O PROJETO E O APP NA LISTA DE APPS INSTALADOS NO 	settings.py
+			Ex: 'nome_projeto', nome_projeto.nome_app
+
+11- NO settings.py EDITAR O DICIONARIO DE CONEXÃO COM O BANCO:
+			DATABASES = {
+    			'default': {
+        		'ENGINE': 'django.db.backends.postgresql_psycopg2',
+		        'NAME': 'mydb',
+		        # 'NAME': os.path.join(BASE_DIR, 'mydb'),
+		        'USER': 'myuser',
+		        'PASSWORD': 'mypassword',
+		        'HOST': '127.0.0.1',
+		        'PORT': '', # 8000 is default
+			    }
+			}
+
+12- CONFIGURAR AS ursl DO PROJETO E DO APP
+13- EXECUTAR O 'python manage.py makemigratiosn'
+14- EXECUTAR O 'python manage.py migrate'
+15- INICIAR O SERVIDOR DE APLICAÇÃO 'python manage.py runserver'
+
+OS COMANDOS DOS PASSOS 13 E 14 SÃO RESPONSÁVEIS POR CRIAR AS TABELAS NO BANCO DE DADOS
+
+LIKS ÚTEI: http://pythonclub.com.br/postgresql-e-django.html
