@@ -1,9 +1,11 @@
 from django.urls import reverse_lazy
 from django.views.generic import TemplateView, ListView, UpdateView, CreateView, DeleteView
-from myproject.gestorbases.models import Base
 from myproject.gestorbases.forms import InsereBaseForm # importa o formulário
+from myproject.gestorbases.forms import InsereTabelaForm
+from myproject.gestorbases.forms import InsereAtualizacaoForm
 from django.shortcuts import render
 from django.http import HttpResponse
+from myproject.gestorbases.models import Base, Tabela, Atualizacao
 
 from myproject.models import Alunos
 
@@ -17,7 +19,10 @@ def home(request):
 
 
 def dashboard(request):
-	return render(request, 'gestorbases/dashboard.html', {})
+	bases = Base.objetos.all()
+	tabelas = Tabela.objetos.all()
+	contexto = {'tabelas': tabelas, 'bases': bases}
+	return render(request, 'gestorbases/dashboard.html', contexto)
 
 
 '''
@@ -29,7 +34,7 @@ def cadastroBase(request):
 # ----------------------------------------------
 
 class BaseCreateView(CreateView):
-    template_name = 'gestorbases/cadastroBase.html'
+    template_name = 'gestorbases/base/cadastroBase.html'
     model = Base
     form_class = InsereBaseForm
     success_url = reverse_lazy("gestorbases:lista_bases")
@@ -38,19 +43,90 @@ class BaseCreateView(CreateView):
 # LISTAGEM DE BASES
 # ----------------------------------------------
 class BaseListView(ListView):
-	template_name = 'gestorbases/listaBases.html'
+	template_name = 'gestorbases/base/listaBases.html'
 	model = Base
 	context_object_name = 'bases'
 
 
-# ATUALIZAÇÃO DE FUNCIONÁRIOS
+# ATUALIZAÇÃO DE BASE
 # ----------------------------------------------
 class BaseUpdateView(UpdateView):
-	template_name = 'gestorbases/editaBase.html'
+	template_name = 'gestorbases/base/editaBase.html'
 	model = Base
 	fields = '__all__'
 	context_object_name = 'base'
 	success_url = reverse_lazy("gestorbases:lista_bases")
+
+
+# EXCLUSÃO DE BASE
+# ----------------------------------------------
+class BaseDeleteView(DeleteView):
+	template_name = 'gestorbases/base/excluiBase.html'
+	model = Base
+	fields = '__all__'
+	context_object_name = 'base'
+	success_url = reverse_lazy('gestorbases:lista_bases')
+
+
+# CADASTRAMENTO DE TABELA
+# ----------------------------------------------
+class TabelaCreateView(CreateView):
+	template_name = 'gestorbases/tabela/cadastroTabela.html'
+	model = Tabela
+	form_class = InsereTabelaForm
+
+
+# LISTAGEM DE TABELAS
+# ----------------------------------------------
+class TabelaListView(ListView):	
+	template_name = 'gestorbases/tabela/listaTabelas.html'
+	model = Tabela
+	context_object_name = 'tabelas'
+
+
+# EDIÇÃO DE TABELAS
+# ----------------------------------------------
+class TabelaUpdateView(UpdateView):
+	template_name = 'gestorbases/tabela/editaTabela.html'
+	models = Tabela
+	fields = '__all__'
+	context_object_name = 'tabela'
+	success_url = reverse_lazy('gestorbases:lista_tabelas')
+
+
+	def get_object(self, queryset=None):
+		tabela = None
+		id = self.kwargs.get(self.pk_url_kwarg)
+		if id is not None:
+			# Busca o tabela apartir do id
+			tabela = Tabela.objetos.filter(id=id).first()
+
+		# Retorna o objeto encontrado
+		return tabela
+		
+
+# EXCLUSÃO DE TABELA
+# ----------------------------------------------
+class TabelaDeleteView(DeleteView):
+	template_name = 'gestorbases/tabela/excluiTabela.html'
+	model = Tabela
+	fields = '__all__'
+	context_object_name = 'tabela'
+	success_url = reverse_lazy('gestorbases:lista_tabelas')
+
+
+class AtualizacaoCreateView(CreateView):
+	template_name = 'gestorbases/atualizacao/cadastroAtualizacao.html'
+	model = Atualizacao
+	form_class = InsereAtualizacaoForm
+
+
+
+
+
+
+
+
 
 
 class AlunosListView(ListView):

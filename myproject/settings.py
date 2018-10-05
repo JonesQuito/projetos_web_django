@@ -25,7 +25,7 @@ SECRET_KEY = '#=a!@0n1_@&4h6q4#83_5oavb8lvxs0ncy81+l^w6xf5ptc_z5'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['10.5.8.32', 'localhost']
 
 
 # Application definition
@@ -81,10 +81,10 @@ WSGI_APPLICATION = 'myproject.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'odp',
+        'NAME': 'base_name',
         # 'NAME': os.path.join(BASE_DIR, 'mydb'),
-        'USER': 'postgres',
-        'PASSWORD': 'postgres',
+        'USER': 'user',
+        'PASSWORD': 'password',
         'HOST': '127.0.0.1',
         'PORT': '', # 8000 is default
     }
