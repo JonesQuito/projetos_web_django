@@ -26,14 +26,7 @@ class InsereAtualizacaoForm(forms.ModelForm):
         # Modelo
         model = Atualizacao
         # Campos que estarão no fomr
-        fields = [
-            'tabela',
-            'responsavel',
-            'observacoes',
-            'mes_ref',
-            'ano_ref',
-            'origem_dados'
-        ]
+        fields = ['tabela', 'responsavel', 'observacoes', 'mes_ref', 'ano_ref', 'origem_dados']
     
         
         

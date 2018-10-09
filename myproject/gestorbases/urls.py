@@ -22,9 +22,13 @@ urlpatterns = [
 
 
 	path('atualizacoes/nova', views.AtualizacaoCreateView.as_view(), name='nova_atualizacao'),
+	path('atualizacoes/lista', views.AtualizacaoListView.as_view(), name='lista_atualizacoes'),
+	path('atualizacoes/detalhes/<pk>', views.AtualizacaoDetalhesView.as_view(), name='detalhes_atualizacao'),
+	path('atualizacoes/atualiza/<pk>', views.AtualizacaoUpdateView.as_view(), name='atualiza_atualizacao'),
+	path('atualizacoes/exclui/<pk>', views.AtualizacaoDeleteView.as_view(), name='exclui_atualizacao'),
 
 
-	path('alunos/', views.AlunosListView. as_view(), name='lista_alunos'),
+	path('alunos/', views.AlunosListView.as_view(), name='lista_alunos'),
 	#path('atualizar/aluno/<pk>', views.AlunosUpdateView.as_view()),
     path('admin/', admin.site.urls),
 ]

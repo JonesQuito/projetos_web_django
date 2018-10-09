@@ -21,7 +21,8 @@ def home(request):
 def dashboard(request):
 	bases = Base.objetos.all()
 	tabelas = Tabela.objetos.all()
-	contexto = {'tabelas': tabelas, 'bases': bases}
+	atualizacoes = Atualizacao.objetos.all()
+	contexto = {'tabelas': tabelas, 'bases': bases, 'atualizacoes': atualizacoes}
 	return render(request, 'gestorbases/dashboard.html', contexto)
 
 
@@ -84,6 +85,7 @@ class TabelaListView(ListView):
 	context_object_name = 'tabelas'
 
 
+
 # EDIÇÃO DE TABELAS
 # ----------------------------------------------
 class TabelaUpdateView(UpdateView):
@@ -115,10 +117,77 @@ class TabelaDeleteView(DeleteView):
 	success_url = reverse_lazy('gestorbases:lista_tabelas')
 
 
+
+# REGISTRO DE NOVA ATUALIZAÇÃO
+# ----------------------------------------------
 class AtualizacaoCreateView(CreateView):
 	template_name = 'gestorbases/atualizacao/cadastroAtualizacao.html'
 	model = Atualizacao
 	form_class = InsereAtualizacaoForm
+	success_url = reverse_lazy('gestorbases:nova_atualizacao')
+
+
+# LISTAGEM DE ATUALIZAÇÕES
+# ----------------------------------------------
+class AtualizacaoListView(ListView):	
+	template_name = 'gestorbases/atualizacao/listaAtualizacoes.html'
+	model = Atualizacao
+	context_object_name = 'atualizacoes'
+
+
+# DETALHAMENTO DE ATUALIZAÇÃO
+# ----------------------------------------------
+class AtualizacaoDetalhesView(UpdateView):
+	template_name = 'gestorbases/atualizacao/detalhesAtualizacao.html'
+	model = Atualizacao
+	fields = '__all__'
+	context_object_name = 'atualizacao'
+
+	def get_object(self, queryset=None):
+		atualizacao = None
+		id = self.kwargs.get(self.pk_url_kwarg)
+		if id is not None:
+			atualizacao = Atualizacao.objetos.filter(id=id).first()
+		return atualizacao
+
+
+
+class AtualizacaoUpdateView(UpdateView):
+	template_name = 'gestorbases/atualizacao/editaAtualizacao.html'
+	model = Atualizacao
+	fields = '__all__'
+	context_object_name = 'atualizacao'
+	success_url = reverse_lazy('gestorbases:lista_atualizacoes')
+
+	def get_object(self, queryset=None):
+		atualizacao = None
+		id = self.kwargs.get(self.pk_url_kwarg)
+		if id is not None:
+			atualizacao = Atualizacao.objetos.filter(id=id).first()
+		return atualizacao
+
+
+# EXCLUSÃO DE ATUALIZAÇÃO
+# ----------------------------------------------
+class AtualizacaoDeleteView(DeleteView):
+	template_name = 'gestorbases/atualizacao/excluiAtualizacao.html'
+	model = Atualizacao
+	fields = '__all__'
+	context_object_name = 'atualizacao'
+	success_url = reverse_lazy('gestorbases:lista_atualizacoes')
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

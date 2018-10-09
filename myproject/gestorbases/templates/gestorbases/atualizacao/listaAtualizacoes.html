@@ -1,9 +1,74 @@
-<!DOCTYPE html>
-<html>
-<head>
-	<title></title>
-</head>
-<body>
-list
-</body>
-</html>
+{% extends "gestorbases/_layouts/base.html" %}
+
+{% load widget_tweaks %}
+
+{% load static %}
+
+{% block titulo_conteudo %}Atualizações {% endblock %}
+
+{% block opcoes %}
+	
+{% endblock %}
+
+{% block conteudo %}			
+	<div class="container-fluid">
+		<div class="table-responsive">
+			{% if atualizacoes|length > 0 %}
+				<table id="tabela-produtos" class="table  table-striped  table-bordered  table-hover  table-condensed  js-sticky-table">
+					<thead class="aw-table-header-dark"><!--thead-dark-->
+						<tr>
+							<th>Tabela</th>
+							<th>Data atualização</th>
+							<th>mes_ref</th>
+							<th>ano_ref</th>
+							<th>Responsável</th>
+							<th class="text-center">Editar</th>
+							<th class="text-center">Excluir</th>
+						</tr>
+					</thead>				  
+					<tbody>
+						{% for atualizacao in atualizacoes %}
+							<tr >
+								<td data-toggle="tooltip" data-placement="top" title='Detalhes da atualização'>
+									<a href="{% url 'gestorbases:detalhes_atualizacao' pk=atualizacao.id %}">{{atualizacao.tabela}}</a>
+								</td>
+								<td >
+									{{atualizacao.data_atualizacao}}
+								</td>
+
+								<td class="text-left">{{atualizacao.mes_ref}}</td>
+
+								<td class="text-center">{{atualizacao.ano_ref}}</td>
+
+								<td class="text-center">{{atualizacao.responsavel}}</td>
+
+								<td class="text-center">
+									<a href="{% url 'gestorbases:atualiza_atualizacao' pk=atualizacao.pk %}" class="btn btn-info btn-xs"><span class="fa fa-edit"></span>
+							        </a>
+							    </td>
+							    <td class="text-center">
+							    	<form>
+									<!--<button type="button" class="btn btn-danger btn-xs"> <!--onclick="excluir()"-->
+										<a href="{% url 'gestorbases:exclui_atualizacao' pk=atualizacao.pk %}" class="btn btn-danger btn-xs">
+										<span class="fa fa-trash" ></span>
+										</a>
+									</form>
+								</td>
+							</tr>
+						{% endfor %}
+					</tbody>
+				</table>
+			{% else %}
+                <div class="text-center mt-5 mb-5 jumbotron">
+                   <h5>Nenhuma <code>Base</code> cadastrada ainda.</h5>
+                </div>
+            {% endif %}
+		</div>
+		<div> <!-- class="text-right" -->
+	        <a href="{% url 'gestorbases:nova_atualizacao' %}" class="btn btn-primary">
+	          Nova Atualização
+	        </a>
+    	</div>
+	</div>
+
+{% endblock %}

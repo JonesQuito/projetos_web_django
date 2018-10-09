@@ -37,6 +37,9 @@ class Atualizacao(models.Model):
     origem_dados = models.CharField(max_length=255, null=False, blank=False)
     objetos = models.Manager()
 
+    def __str__(self):
+        return self.tabela.nome
+
         
 
 '''
