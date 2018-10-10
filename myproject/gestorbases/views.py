@@ -1,4 +1,5 @@
 from django.urls import reverse_lazy
+from django.shortcuts import redirect
 from django.views.generic import TemplateView, ListView, UpdateView, CreateView, DeleteView
 from myproject.gestorbases.forms import InsereBaseForm # importa o formulário
 from myproject.gestorbases.forms import InsereTabelaForm
@@ -9,6 +10,43 @@ from myproject.gestorbases.models import Base, Tabela, Atualizacao
 
 from myproject.models import Alunos
 
+from django.contrib.auth.mixins import LoginRequiredMixin
+
+
+
+
+# ########################### SISTEMA DE LOGIN ##########################
+
+from django.contrib.auth import authenticate, logout, login as authlogin
+from django.shortcuts import render_to_response
+from django.template import Context, loader, RequestContext
+from django.contrib.auth.decorators import login_required
+
+
+def login(request):
+	if request.user.id:
+		return render(request, 'gestorbases/logado.html',{})
+
+	if request.POST:
+		usuario = request.POST.get('usuario')
+		senha = request.POST.get('senha')
+		u = authenticate(request, username=usuario, password=senha)
+
+		if(u is not None):
+			if(u.is_active):
+				authlogin(request, u)
+				return redirect('gestorbases:dashboard')
+				#return render(request, 'gestorbases/dashboard.html',{'user': u})
+	return render(request, 'gestorbases/login.html', {})
+
+
+def sair(request):
+	logout(request)
+	return render(request, 'gestorbases/login.html', {})
+
+
+# ########################### SISTEMA DE LOGIN ##########################
+
 # Create your views here.
 
 def home(request):
@@ -17,7 +55,10 @@ def home(request):
 	contexto = {'alunos': alunos}
 	return render(request, 'bases/index.html', contexto)
 
+def logado(request):
+	return render(request, 'gestorbases/logado.html',{})
 
+@login_required
 def dashboard(request):
 	bases = Base.objetos.all()
 	tabelas = Tabela.objetos.all()
@@ -34,7 +75,7 @@ def cadastroBase(request):
 # CADASTRAMENTO DE BASE
 # ----------------------------------------------
 
-class BaseCreateView(CreateView):
+class BaseCreateView(LoginRequiredMixin, CreateView):
     template_name = 'gestorbases/base/cadastroBase.html'
     model = Base
     form_class = InsereBaseForm
@@ -43,7 +84,7 @@ class BaseCreateView(CreateView):
 
 # LISTAGEM DE BASES
 # ----------------------------------------------
-class BaseListView(ListView):
+class BaseListView(LoginRequiredMixin, ListView):
 	template_name = 'gestorbases/base/listaBases.html'
 	model = Base
 	context_object_name = 'bases'
@@ -51,7 +92,7 @@ class BaseListView(ListView):
 
 # ATUALIZAÇÃO DE BASE
 # ----------------------------------------------
-class BaseUpdateView(UpdateView):
+class BaseUpdateView(LoginRequiredMixin, UpdateView):
 	template_name = 'gestorbases/base/editaBase.html'
 	model = Base
 	fields = '__all__'
@@ -61,7 +102,7 @@ class BaseUpdateView(UpdateView):
 
 # EXCLUSÃO DE BASE
 # ----------------------------------------------
-class BaseDeleteView(DeleteView):
+class BaseDeleteView(LoginRequiredMixin, DeleteView):
 	template_name = 'gestorbases/base/excluiBase.html'
 	model = Base
 	fields = '__all__'
@@ -69,17 +110,20 @@ class BaseDeleteView(DeleteView):
 	success_url = reverse_lazy('gestorbases:lista_bases')
 
 
+
+
 # CADASTRAMENTO DE TABELA
 # ----------------------------------------------
-class TabelaCreateView(CreateView):
+class TabelaCreateView(LoginRequiredMixin, CreateView):
 	template_name = 'gestorbases/tabela/cadastroTabela.html'
 	model = Tabela
 	form_class = InsereTabelaForm
+	success_url = reverse_lazy('gestorbases:lista_tabelas')
 
 
 # LISTAGEM DE TABELAS
 # ----------------------------------------------
-class TabelaListView(ListView):	
+class TabelaListView(LoginRequiredMixin, ListView):	
 	template_name = 'gestorbases/tabela/listaTabelas.html'
 	model = Tabela
 	context_object_name = 'tabelas'
@@ -88,7 +132,7 @@ class TabelaListView(ListView):
 
 # EDIÇÃO DE TABELAS
 # ----------------------------------------------
-class TabelaUpdateView(UpdateView):
+class TabelaUpdateView(LoginRequiredMixin, UpdateView):
 	template_name = 'gestorbases/tabela/editaTabela.html'
 	models = Tabela
 	fields = '__all__'
@@ -109,7 +153,7 @@ class TabelaUpdateView(UpdateView):
 
 # EXCLUSÃO DE TABELA
 # ----------------------------------------------
-class TabelaDeleteView(DeleteView):
+class TabelaDeleteView(LoginRequiredMixin, DeleteView):
 	template_name = 'gestorbases/tabela/excluiTabela.html'
 	model = Tabela
 	fields = '__all__'
@@ -120,7 +164,7 @@ class TabelaDeleteView(DeleteView):
 
 # REGISTRO DE NOVA ATUALIZAÇÃO
 # ----------------------------------------------
-class AtualizacaoCreateView(CreateView):
+class AtualizacaoCreateView(LoginRequiredMixin, CreateView):
 	template_name = 'gestorbases/atualizacao/cadastroAtualizacao.html'
 	model = Atualizacao
 	form_class = InsereAtualizacaoForm
@@ -129,7 +173,7 @@ class AtualizacaoCreateView(CreateView):
 
 # LISTAGEM DE ATUALIZAÇÕES
 # ----------------------------------------------
-class AtualizacaoListView(ListView):	
+class AtualizacaoListView(LoginRequiredMixin, ListView):	
 	template_name = 'gestorbases/atualizacao/listaAtualizacoes.html'
 	model = Atualizacao
 	context_object_name = 'atualizacoes'
@@ -137,7 +181,7 @@ class AtualizacaoListView(ListView):
 
 # DETALHAMENTO DE ATUALIZAÇÃO
 # ----------------------------------------------
-class AtualizacaoDetalhesView(UpdateView):
+class AtualizacaoDetalhesView(LoginRequiredMixin, UpdateView):
 	template_name = 'gestorbases/atualizacao/detalhesAtualizacao.html'
 	model = Atualizacao
 	fields = '__all__'
@@ -152,7 +196,7 @@ class AtualizacaoDetalhesView(UpdateView):
 
 
 
-class AtualizacaoUpdateView(UpdateView):
+class AtualizacaoUpdateView(LoginRequiredMixin, UpdateView):
 	template_name = 'gestorbases/atualizacao/editaAtualizacao.html'
 	model = Atualizacao
 	fields = '__all__'
@@ -169,7 +213,7 @@ class AtualizacaoUpdateView(UpdateView):
 
 # EXCLUSÃO DE ATUALIZAÇÃO
 # ----------------------------------------------
-class AtualizacaoDeleteView(DeleteView):
+class AtualizacaoDeleteView(LoginRequiredMixin, DeleteView):
 	template_name = 'gestorbases/atualizacao/excluiAtualizacao.html'
 	model = Atualizacao
 	fields = '__all__'

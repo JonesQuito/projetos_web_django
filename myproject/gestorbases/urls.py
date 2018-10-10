@@ -28,6 +28,12 @@ urlpatterns = [
 	path('atualizacoes/exclui/<pk>', views.AtualizacaoDeleteView.as_view(), name='exclui_atualizacao'),
 
 
+	#path('logado/', views.logado),
+
+	path('login/', views.login, name='login'),
+	path('sair/', views.sair, name='sair'),
+
+
 	path('alunos/', views.AlunosListView.as_view(), name='lista_alunos'),
 	#path('atualizar/aluno/<pk>', views.AlunosUpdateView.as_view()),
     path('admin/', admin.site.urls),

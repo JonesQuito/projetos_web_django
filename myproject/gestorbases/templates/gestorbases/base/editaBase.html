@@ -5,19 +5,7 @@
 
 {% load static %}
 
-{% block titulo_conteudo %}Lista de Bases {% endblock %}
-
-{% block opcoes %}
-    <div> <!-- class="text-right" -->
-        <a href="{% url 'gestorbases:nova_base' %}" class="btn btn-primary">
-          Nova Base
-        </a>
-        <a href="{% url 'gestorbases:lista_bases' %}" class="btn btn-primary">
-          Lista bases
-        </a>
-    </div>
-{% endblock %}
-
+{% block titulo_conteudo %} Edita Base {% endblock %}
 
 {% block conteudo %}
 
@@ -59,30 +47,10 @@
           </div>
         </div>
       </div>
-
-      <!--
-      <div class="row">
-        <div class="col-sm-3">
-          <div class="form-group">
-            <label for="input-base-origem">Origem dos dados</label>
-            <input id="input-base-origem" type="text" class="form-control" placeholder="Origem dos dados"/>
-          </div>
-        </div>
-        
-        <div class="col-sm-3">
-          <div class="form-group">
-            <label for="input-base-atualizacao">Ultima atualização</label>
-            {% render_field form.atualizacao class+='form-control' %}
-            
-          </div>
-        </div>
-      </div>
-      -->
       
       <div class="form-group">
         <button class="btn  btn-primary" type="submit">Salvar</button>
-        <a href="#" class="btn  btn-default">Cancelar</a>
-        <a href="#" class="btn  btn-link  aw-btn-link-danger" onclick="excluir()">Excluir este produto</a>
+        <a href="{% url 'gestorbases:lista_bases' %}" class="btn  btn-default">Cancelar</a>
       </div>
 
 

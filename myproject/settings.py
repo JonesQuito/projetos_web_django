@@ -56,6 +56,15 @@ MIDDLEWARE = [
 
 ROOT_URLCONF = 'myproject.urls'
 
+
+TEMPLATES_CONTEXT_PROCESSORS = (
+    'django.core.context_processors.request',
+    'django.core.context_processors.auth',
+    'django.core.context_processors.debug',
+    'django.core.context_processors.i18n',
+)
+
+
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
@@ -89,6 +98,11 @@ DATABASES = {
         'PORT': '', # 8000 is default
     }
 }
+
+
+# ESQUEMA DE LOGIN
+AUTH_PROFILE_MODULE = 'myproject.gestorbases'
+LOGIN_URL = '/gestorbases/login/'
 
 
 # Password validation

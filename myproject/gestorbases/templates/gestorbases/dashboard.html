@@ -7,113 +7,55 @@
 
 {% block titulo_conteudo %}Dashboard{% endblock %}
 
-
 {% block conteudo %}
   <div class="container-fluid">
     
     <div class="row">
-      <div class="col-sm-4">
-      
-        <div class="aw-box">
-          <div class="aw-box__icon">
-            <i class="fa  fa-database  fa-3x"></i>
+      <a href="{% url 'gestorbases:lista_bases' %}">
+        <div class="col-sm-4">
+          <div class="aw-box">
+            <div class="aw-box__icon">
+              <i class="fa  fa-database  fa-3x"></i>
+            </div>
+            <!--<div class="aw-box__title">Bases Registradas</div>-->
+            <div class="aw-box__value">Bases Registradas</div>
+            <div class="aw-box__value">{{ bases|length }}</div>
           </div>
-          <div class="aw-box__value">Bases Registradas</div>
-          <div class="aw-box__value">{{ bases|length }}</div>
         </div>
-      
-      </div>
-
-      <div class="col-sm-4">
-      
-        <div class="aw-box">
-          <div class="aw-box__icon">
-            <i class="fa fa-table  fa-3x"></i>
+      </a>
+      <a href="{% url 'gestorbases:lista_tabelas' %}">
+        <div class="col-sm-4">
+          <div class="aw-box">
+            <div class="aw-box__icon">
+              <i class="fa fa-table  fa-3x"></i>
+            </div>
+            <!--<div class="aw-box__title">Tabelas Registradas</div>-->
+            <div class="aw-box__value">Tabelas Registradas</div>
+            <div class="aw-box__value">{{ tabelas|length }}</div>
+          </div>      
+        </div>
+      </a>
+      <a href="{% url 'gestorbases:lista_atualizacoes' %}">
+        <div class="col-sm-4">
+          <div class="aw-box">
+            <div class="aw-box__icon">
+              <i class="fa  fa-refresh  fa-3x"></i>
+            </div>
+            <!--<div class="aw-box__title">Total de Atualizações</div>-->
+            <div class="aw-box__value">Atualizações Registradas</div>
+            <div class="aw-box__value">{{ atualizacoes|length }}</div>
           </div>
-          <div class="aw-box__value">Tabelas Registradas</div>
-          <div class="aw-box__value">{{ tabelas|length }}</div>
         </div>
-      
-      </div>
-      
-      <div class="col-sm-4">
-      
-        <div class="aw-box">
-          <div class="aw-box__icon">
-            <i class="fa  fa-refresh  fa-3x"></i>
-          </div>
-          <div class="aw-box__value">Total de Atualizações</div>
-          <div class="aw-box__value">{{ atualizacoes|length }}</div>
-        </div>
-      
-      </div>
+      </a>
     </div>
 
     <div class="row">
-      <div class="col-sm-4">
-      
-        <div class="aw-box">
-          <div class="aw-box__icon">
-            <i class="fa  fa-clock-o  fa-3x"></i>
-          </div>
-          <div class="aw-box__value">Atualizadas em Janeiro</div>
-          <div class="aw-box__value">7</div>
-        </div>
-      
-      </div>
-      
-      <!-- 
-      <div class="col-sm-4">
-      
-        <div class="aw-box">
-          <div class="aw-box__icon">
-            <i class="fa  fa-battery-empty  fa-3x"></i>
-          </div>
-          <div class="aw-box__value">123</div>
-          <div class="aw-box__title">Produtos sem estoque</div>
-        </div>
-      
-      </div>
-      
-      <div class="col-sm-4">
-      
-        <div class="aw-box">
-          <div class="aw-box__icon">
-            <i class="fa  fa-truck  fa-3x"></i>
-          </div>
-          <div class="aw-box__value">3.344</div>
-          <div class="aw-box__title">Estoque total</div>
-        </div>
-      
-      </div>
-      -->
-    </div>
-
-    <div class="row">
-      <div class="col-sm-6">
+      <div class="col-sm-12">
         <div class="aw-graph-box">
           <div class="aw-graph-box__header">
             <h2 class="aw-graph-box__title">Faturamento por mês <small>últimos 12 meses</small></h2>
           </div>
           <div class="aw-graph-box__content">
-            <div class="aw-graph-box__no-data">
-                <i class="fa  fa-line-chart  fa-2x"></i>
-                <span>Não há dados</span>
-            </div>
-
-            <div>
-              <canvas id="lineChart" height="160"></canvas>
-            </div>
-          </div>
-        </div>
-      </div>
-      
-      <div class="col-sm-6">
-        <div class="aw-graph-box">
-          <div class="aw-graph-box__header">
-            <h2 class="aw-graph-box__title">Faturamento por representante <small>últimos 12 meses</small></h2>
-          </div>
-          <div class="aw-graph-box__content" style="position: relative">
             <div class="aw-graph-box__no-data">
                 <i class="fa  fa-line-chart  fa-2x"></i>
                 <span>Não há dados</span>

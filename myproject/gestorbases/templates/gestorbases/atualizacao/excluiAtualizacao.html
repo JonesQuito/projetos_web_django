@@ -5,7 +5,7 @@
 
 {% load static %}
 
-{% block titulo_conteudo %}Excluir Base {% endblock %}
+{% block titulo_conteudo %}Excluir Registro de atualização {% endblock %}
 
 {% block opcoes %}
     
@@ -17,21 +17,30 @@
         								border-radius: 5px;
         								padding: 2%; box-shadow: 5px 5px 8px #888888;">
       <div class="card-body">
-        <h5 class="card-title" style="font-weight: bold;">Tem certeza que quer excluir esta base?</h5>
+        <h5 class="card-title" style="font-weight: bold;">Tem certeza que quer excluir este registro?</h5>
         <hr />
         <div class="form-group" style="border-radius: 5px;
         								padding: 2%;  ">
-          <label for="input-base-nome">Nome</label>
-          {{base.nome}}
+          <label for="input-base-nome">Tabela: </label>
+          {{atualizacao.tabela}}
           <br/>
-          <label for="input-base-nome">Descrição</label>
-          {{base.descricao}}
+          <label for="input-base-nome">Data Atualização: </label>
+          {{atualizacao.data_atualizacao}}
           <br/>
-          <label for="input-base-nome">Host</label>
-          {{base.host}}
+          <label for="input-base-nome">Origem Dados: </label>
+          {{atualizacao.origem_dados}}
           <br/>
-          <label for="input-base-nome">Owner</label>
-          {{base.owner}}
+          <label for="input-base-nome">Ano de Referência: </label>
+          {{atualizacao.ano_ref}}
+          <br/>
+          <label for="input-base-nome">Mês de Referência: </label>
+          {{atualizacao.mes_ref}}
+          <br/>
+          <label for="input-base-nome">Responsável: </label>
+          {{atualizacao.responsavel}}
+          <br/>
+          <label for="input-base-nome">Observações: </label>
+          {{atualizacao.observacoes}}
         </div>
       </div>
 
@@ -39,7 +48,7 @@
           {% csrf_token %}
           <hr />
           <div class="text-right">
-            <a href="{% url 'gestorbases:lista_bases' %}" 
+            <a href="{% url 'gestorbases:lista_atualizacoes' %}" 
               class="btn btn-outline-danger">
                 Cancelar
             </a>
