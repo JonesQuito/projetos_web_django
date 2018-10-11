@@ -1,7 +1,10 @@
+
 from myproject.website.views import IndexTemplateView, FuncionarioListView, FuncionarioUpdateView, FuncionarioCreateView, \
     FuncionarioDeleteView
 
 from django.urls import path
+
+from myproject.website import views
 
 app_name = 'website'
 
@@ -13,7 +16,9 @@ urlpatterns = [
     path('funcionario/cadastrar', FuncionarioCreateView.as_view(), name="cadastra_funcionario"),
 
     # GET /funcionarios
-    path('funcionarios/', FuncionarioListView.as_view(), name="lista_funcionarios"),
+    #path('funcionarios/', FuncionarioListView.as_view(), name="lista_funcionarios"),
+
+    path('funcionarios/', views.listing, name='lista_funcionarios'),
 
     # GET/POST /funcionario/{pk}
     path('funcionario/<pk>', FuncionarioUpdateView.as_view(), name="atualiza_funcionario"),

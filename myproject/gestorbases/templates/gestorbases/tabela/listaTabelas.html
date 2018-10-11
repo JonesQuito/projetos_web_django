@@ -62,11 +62,49 @@
                 </div>
             {% endif %}
 		</div>
-		<div> <!-- class="text-right" -->
-	        <a href="{% url 'gestorbases:nova_tabela' %}" class="btn btn-primary">
-	          Nova Tabela
-	        </a>
-    	</div>
-	</div>
+		<hr style="margin-top: : 0px">
 
+		<div class="row">
+			<!-- CONTROLES DE NAVEGAÇÃO -->
+			<div class="col-sm-9 col-md-6 col-lg-8">
+				<ul class="pagination">
+					{% for pagina in tabelas.paginator.page_range %}
+						
+						<li class="{% if  pagina  ==  tabelas.number  %}active{% endif %}" ><a href="?page={{pagina}}">{{pagina}}</a></li>
+					{% endfor %}
+				
+				</ul>
+			</div>
+				<!--
+	            <div class="pagination">
+				    <span class="step-links">
+				        {% if tabelas.has_previous %}
+				            <a href="?page=1">&laquo; first</a>
+				            <a href="?page={{ tabelas.previous_page_number }}">previous</a>
+				        {% endif %}
+
+				        <span class="current">
+				            Page {{ tabelas.number }} of {{ tabelas.paginator.num_pages }}.
+				        </span>
+
+				        {% if tabelas.has_next %}
+				            <a href="?page={{ tabelas.next_page_number }}">next</a>
+				            <a href="?page={{ tabelas.paginator.num_pages }}">last &raquo;</a>
+				        {% endif %}
+				    </span>
+				</div>
+				-->
+				<!-- CONTROLES DE NAVEGAÇÃO -->
+
+			<div class="col-sm-3 col-md-6 col-lg-4 text-right">
+				<div> <!-- class="text-right" -->
+			        <a href="{% url 'gestorbases:nova_tabela' %}" class="btn btn-primary">
+			          Nova Tabela
+			        </a>
+		    	</div>
+	    	</div>
+
+    	</div>
+
+	</div>
 {% endblock %}

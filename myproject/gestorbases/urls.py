@@ -16,7 +16,8 @@ urlpatterns = [
 
 
 	path('tabelas/nova', views.TabelaCreateView.as_view(), name='nova_tabela'),
-	path('tabelas/lista', views.TabelaListView.as_view(), name='lista_tabelas'),
+	#path('tabelas/lista', views.TabelaListView.as_view(), name='lista_tabelas'),
+	path('tabelas/lista', views.listing, name='lista_tabelas'),
 	path('tabelas/atualiza/<pk>', views.TabelaUpdateView.as_view(), name='atualiza_tabela'),
 	path('tabelas/exclui/<pk>', views.TabelaDeleteView.as_view(), name='exclui_tabela'),
 

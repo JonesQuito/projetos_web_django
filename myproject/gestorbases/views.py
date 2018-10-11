@@ -12,6 +12,14 @@ from myproject.models import Alunos
 
 from django.contrib.auth.mixins import LoginRequiredMixin
 
+# ---------- DEPENDÊNCIAS NECESSÁRIAS PARA IMPLEMENTAR A PAGINAÇÃO ----------
+from django.core.paginator import EmptyPage
+from django.core.paginator import PageNotAnInteger
+from django.core.paginator import Paginator
+
+from django.shortcuts import render
+# ---------- DEPENDÊNCIAS NECESSÁRIAS PARA IMPLEMENTAR A PAGINAÇÃO ----------
+
 
 
 
@@ -123,12 +131,27 @@ class TabelaCreateView(LoginRequiredMixin, CreateView):
 
 # LISTAGEM DE TABELAS
 # ----------------------------------------------
-class TabelaListView(LoginRequiredMixin, ListView):	
+class TabelaListView(LoginRequiredMixin, ListView):
 	template_name = 'gestorbases/tabela/listaTabelas.html'
 	model = Tabela
 	context_object_name = 'tabelas'
 
 
+def listing(request):
+		tabelas_lista = Tabela.objetos.all()
+		paginator = Paginator(tabelas_lista, 7)
+		page = request.GET.get('page')
+		tabelas = paginator.get_page(page)
+		return render(request, 'gestorbases/tabela/listaTabelas.html', {'tabelas': tabelas})
+
+
+def is_active_class(request):
+	atual = request.GET.get('atual')
+	pagina = request.GET.get('pagina')
+	retorno = ''
+	if pagina == atual:
+		retorno = 'active'
+	return retorno
 
 # EDIÇÃO DE TABELAS
 # ----------------------------------------------

@@ -3,6 +3,9 @@ from django.views.generic import TemplateView, ListView, UpdateView, CreateView,
 from myproject.models import Funcionario
 from myproject.website.forms import InsereFuncionarioForm
 
+from django.core.paginator import EmptyPage, PageNotAnInteger, Paginator
+from django.shortcuts import render
+
 
 # PÁGINA PRINCIPAL
 # ----------------------------------------------
@@ -49,3 +52,14 @@ class FuncionarioDeleteView(DeleteView):
     fields = '__all__'
     context_object_name = 'funcionario'
     success_url = reverse_lazy("website:lista_funcionarios")
+
+
+
+# PAGINAÇÃO DE FUNCIONÁRIOS
+# ----------------------------------------------
+def listing(request):
+    funcionarios_list = Funcionario.objetos.all()
+    paginator = Paginator(funcionarios_list, 2) # Exibe dois funcionários por página
+    page = request.GET.get('page')
+    funcionarios = paginator.get_page(page)
+    return render(request, 'website/lista2.html', {'funcionarios': funcionarios})
