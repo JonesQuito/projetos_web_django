@@ -1,6 +1,6 @@
 from django.urls import reverse_lazy
 from django.shortcuts import redirect
-from django.views.generic import TemplateView, ListView, UpdateView, CreateView, DeleteView
+from django.views.generic import TemplateView, ListView, UpdateView, CreateView, DeleteView, View
 from myproject.gestorbases.forms import InsereBaseForm # importa o formulário
 from myproject.gestorbases.forms import InsereTabelaForm
 from myproject.gestorbases.forms import InsereAtualizacaoForm
@@ -92,11 +92,18 @@ class BaseCreateView(LoginRequiredMixin, CreateView):
 
 # LISTAGEM DE BASES
 # ----------------------------------------------
+'''
 class BaseListView(LoginRequiredMixin, ListView):
 	template_name = 'gestorbases/base/listaBases.html'
 	model = Base
 	context_object_name = 'bases'
-
+'''
+def listingBases(request):
+	bases_lista = Base.objetos.all().order_by('nome')
+	paginator = Paginator(bases_lista, 3)
+	page = request.GET.get('page')
+	bases = paginator.get_page(page)
+	return render(request, 'gestorbases/base/listaBases.html', {'bases':bases})
 
 # ATUALIZAÇÃO DE BASE
 # ----------------------------------------------
@@ -131,20 +138,20 @@ class TabelaCreateView(LoginRequiredMixin, CreateView):
 
 # LISTAGEM DE TABELAS
 # ----------------------------------------------
+'''
 class TabelaListView(LoginRequiredMixin, ListView):
 	template_name = 'gestorbases/tabela/listaTabelas.html'
 	model = Tabela
 	context_object_name = 'tabelas'
-
-
-def listing(request):
-		tabelas_lista = Tabela.objetos.all()
+'''
+def listingTables(request):
+		tabelas_lista = Tabela.objetos.all().order_by('nome')
 		paginator = Paginator(tabelas_lista, 7)
 		page = request.GET.get('page')
 		tabelas = paginator.get_page(page)
 		return render(request, 'gestorbases/tabela/listaTabelas.html', {'tabelas': tabelas})
 
-
+'''
 def is_active_class(request):
 	atual = request.GET.get('atual')
 	pagina = request.GET.get('pagina')
@@ -152,7 +159,7 @@ def is_active_class(request):
 	if pagina == atual:
 		retorno = 'active'
 	return retorno
-
+'''
 # EDIÇÃO DE TABELAS
 # ----------------------------------------------
 class TabelaUpdateView(LoginRequiredMixin, UpdateView):
@@ -202,6 +209,15 @@ class AtualizacaoListView(LoginRequiredMixin, ListView):
 	context_object_name = 'atualizacoes'
 
 
+
+def listingAtualizacoes(request):
+	atualizacoes_lista = Atualizacao.objetos.all().order_by('pk')
+	paginator = Paginator(atualizacoes_lista, 5)
+	page = request.GET.get('page')
+	atualizacoes = paginator.get_page(page)
+	return render(request, 'gestorbases/atualizacao/listaAtualizacoes.html', {'atualizacoes': atualizacoes})
+
+
 # DETALHAMENTO DE ATUALIZAÇÃO
 # ----------------------------------------------
 class AtualizacaoDetalhesView(LoginRequiredMixin, UpdateView):
@@ -244,6 +260,39 @@ class AtualizacaoDeleteView(LoginRequiredMixin, DeleteView):
 	success_url = reverse_lazy('gestorbases:lista_atualizacoes')
 
 
+
+
+
+def teste(request):
+	tabelas = Tabela.objetos.all()
+	if request.POST:
+		tabela = request.POST.get('tabela')
+		tabelas = Tabela.objetos.filter(nome__icontains=tabela)
+		return render(request,'gestorbases/teste.html', {'tabelas':tabelas})
+	return render(request,'gestorbases/teste.html', {'tabelas':tabelas})
+
+
+
+
+
+'''
+
+class AtualizacaoDetalhesView(LoginRequiredMixin, UpdateView):
+	template_name = 'gestorbases/atualizacao/detalhesAtualizacao.html'
+	model = Atualizacao
+	fields = '__all__'
+	context_object_name = 'atualizacao'
+
+	def get_object(self, queryset=None):
+		atualizacao = None
+		id = self.kwargs.get(self.pk_url_kwarg)
+		if id is not None:
+			atualizacao = Atualizacao.objetos.filter(id=id).first()
+		return atualizacao
+
+		usuario = request.POST.get('usuario')
+		senha = request.POST.get('senha')
+'''
 
 
 

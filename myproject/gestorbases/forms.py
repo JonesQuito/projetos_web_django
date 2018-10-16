@@ -27,7 +27,13 @@ class InsereAtualizacaoForm(forms.ModelForm):
         model = Atualizacao
         # Campos que estarão no fomr
         fields = ['tabela', 'responsavel', 'observacoes', 'mes_ref', 'ano_ref', 'origem_dados']
-    
+
+
+    def filteringTables(request):
+        tabela = request.GET.get('tabela')
+        tabelas = Tabela.objetos.filter(nome__icontains=tabela)
+        return tabelas
+
         
         
 

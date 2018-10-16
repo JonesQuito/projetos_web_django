@@ -67,43 +67,33 @@
                 </div>
             {% endif %}
 		</div>
-		<div> <!-- class="text-right" -->
-	        <a href="{% url 'gestorbases:nova_base' %}" class="btn btn-primary">
-	          Nova Base
-	        </a>
+
+
+    	<hr style="margin-top: : 0px">
+    	<div class="row">
+			<!-- CONTROLES DE NAVEGAÇÃO -->
+			<div class="col-sm-9 col-md-6 col-lg-8">
+				<ul class="pagination">
+					{% for base in bases.paginator.page_range %}
+						
+						<li class="{% if  base  ==  bases.number  %}active{% endif %}" ><a href="?page={{base}}">{{base}}</a></li>
+					{% endfor %}
+				
+				</ul>
+			</div>
+
+
+			<div class="col-sm-3 col-md-6 col-lg-4 text-right">
+				<div> <!-- class="text-right" -->
+			        <a href="{% url 'gestorbases:nova_base' %}" class="btn btn-primary">
+			          Nova Base
+			        </a>
+		    	</div>
+	    	</div>
+
     	</div>
+
 	</div>
-
-
-
-
-
-
-
-<!-- Button trigger modal 
-<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModal">
-  Launch demo modal
-</button>
--->
-
-<!-- Modal -->
-<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-        <h4 class="modal-title" id="myModalLabel">Modal title</h4>
-      </div>
-      <div class="modal-body">
-        ...
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary">Save changes</button>
-      </div>
-    </div>
-  </div>
-</div>
 
 
 

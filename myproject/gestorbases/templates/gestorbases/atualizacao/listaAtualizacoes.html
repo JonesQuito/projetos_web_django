@@ -64,10 +64,29 @@
                 </div>
             {% endif %}
 		</div>
-		<div> <!-- class="text-right" -->
-	        <a href="{% url 'gestorbases:nova_atualizacao' %}" class="btn btn-primary">
-	          Nova Atualização
-	        </a>
+
+    	<hr style="margin-top: : 0px">
+    	<div class="row">
+			<!-- CONTROLES DE NAVEGAÇÃO -->
+			<div class="col-sm-9 col-md-6 col-lg-8">
+				<ul class="pagination">
+					{% for atualizacao in atualizacoes.paginator.page_range %}
+						
+						<li class="{% if  atualizacao  ==  atualizacoes.number  %}active{% endif %}" ><a href="?page={{atualizacao}}">{{atualizacao}}</a></li>
+					{% endfor %}
+				
+				</ul>
+			</div>
+
+
+			<div class="col-sm-3 col-md-6 col-lg-4 text-right">
+				<div> <!-- class="text-right" -->
+			        <a href="{% url 'gestorbases:nova_atualizacao' %}" class="btn btn-primary">
+			          Nova Atualização
+			        </a>
+		    	</div>
+	    	</div>
+
     	</div>
 	</div>
 
