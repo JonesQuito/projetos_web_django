@@ -31,7 +31,6 @@ urlpatterns = [
 	path('atualizacoes/exclui/<pk>', views.AtualizacaoDeleteView.as_view(), name='exclui_atualizacao'),
 
 
-	#path('logado/', views.logado),
 
 	path('login/', views.login, name='login'),
 	path('sair/', views.sair, name='sair'),
@@ -41,9 +40,10 @@ urlpatterns = [
 
 
 	path('teste/', views.teste, name='teste'),
+	path('teste2/', views.teste2, name='teste2'),
 
 
-	path('alunos/', views.AlunosListView.as_view(), name='lista_alunos'),
+	#path('alunos/', views.AlunosListView.as_view(), name='lista_alunos'),
 	#path('atualizar/aluno/<pk>', views.AlunosUpdateView.as_view()),
     path('admin/', admin.site.urls),
 ]

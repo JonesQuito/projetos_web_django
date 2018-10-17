@@ -14,8 +14,8 @@
 {% block conteudo %}
 	
     <div class="row-fluid">
-        <form name="form1" method="post" action="/gestorbases/teste/" class="form-signin">
-        {% csrf_token %}
+        <form name="form1" id="form_search" method="GET" action="{% url 'gestorbases:teste2' %}" class="form-signin">
+        
         <div class="col-lg-3">
             <input type="text" name="tabela" id="tabela" class="form-control" placeholder="tabela" autofocus>
         </div>
@@ -50,7 +50,7 @@
                                 <td class="text-center">{{tabela.base}}</td>
 
                                 <td>
-                                    <a href="{% url 'gestorbases:atualiza_tabela' pk=tabela.id %}">{{tabela}}</a>
+                                    <a href="{% url 'gestorbases:atualiza_tabela' pk=tabela.id %}">{{tabela.nome}}</a>
                                 </td>
 
                                 <td >{{tabela.descricao}}</td>
@@ -93,6 +93,25 @@
  <script>
     
     $("#tabela").keyup(function() {
+        console.log($('#tabela').val());
+        $('#form_search').submit(function(e){
+            e.preventDefault();
+
+            $.ajax({
+                url: $(this).attr('action'),
+                type: $(this).attr('method'),
+                data: $(this).serialize(),
+
+                success: function(data){
+                    console.log(data);
+                }
+
+            })
+
+
+            alert('form submited!!' + $(this).attr('action'));
+        })
+        /*
         $.ajax({
             var tabela = $('#tabela').val();
             alert( "Tabela: " + tabela );
@@ -103,6 +122,7 @@
             },
           
         })
+        */
 
     });
   </script>

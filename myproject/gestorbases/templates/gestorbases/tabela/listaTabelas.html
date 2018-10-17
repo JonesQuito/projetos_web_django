@@ -12,6 +12,21 @@
 
 {% block conteudo %}			
 	<div class="container-fluid">
+		<div class="row">
+			<form method="get" action="#">
+		        <div class="col-sm-6">
+			          <div class="form-group">
+			            <input type="text" name="tabela" class="form-control xs ">
+			          </div>
+		        </div>
+		        <div class="col-sm-6">
+		        	<div class="form-group">
+			            <input type="submit" value="buscar" class="btn btn-primary">
+			         </div>
+		        </div>
+	        </form>
+	    </div>
+	    
 		<div class="table-responsive">
 			{% if tabelas|length > 0 %}
 				<table id="tabela-produtos" class="table  table-striped  table-bordered  table-hover  table-condensed  js-sticky-table">
@@ -45,7 +60,7 @@
 							    </td>
 							    <td class="text-center">
 							    	<form>
-									<!--<button type="button" class="btn btn-danger btn-xs"> <!--onclick="excluir()"-->
+									<!--<button type="button" class="btn btn-danger btn-xs"> onclick="excluir()"-->
 										<a href="{% url 'gestorbases:exclui_tabela' pk=tabela.id %}" class="btn btn-danger btn-xs">
 										<span class="fa fa-trash" ></span>
 										</a>
@@ -66,7 +81,7 @@
 
 		<div class="row">
 			<!-- CONTROLES DE NAVEGAÇÃO -->
-			<div class="col-sm-9 col-md-6 col-lg-8">
+			<div class="col-sm-9 col-md-9 col-lg-8">
 				<ul class="pagination">
 					{% for pagina in tabelas.paginator.page_range %}
 						
@@ -76,7 +91,7 @@
 				</ul>
 			</div>
 
-			<div class="col-sm-3 col-md-6 col-lg-4 text-right">
+			<div class="col-sm-3 col-md-3 col-lg-4 text-right">
 				<div> <!-- class="text-right" -->
 			        <a href="{% url 'gestorbases:nova_tabela' %}" class="btn btn-primary">
 			          Nova Tabela

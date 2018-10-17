@@ -69,7 +69,7 @@
 		      <li class="dropdown">
 		        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
 		          <i class="fa  fa-user"></i>
-		          {{user.username}}
+		          {{user.username|upper}}
 		        </a>
 		        
 		        <ul class="dropdown-menu">
@@ -77,7 +77,7 @@
 		            <div class="aw-logged-user">
 		              <img src="https://api.adorable.io/avatars/80/joaodascouves" 
 		                width="80" height="80" alt="João das Couves" class="aw-logged-user__picture" />
-		              <span class="aw-logged-user__name">{{ user.username }}</span>
+		              <span class="aw-logged-user__name">{{ user.username|upper }}</span>
 		            </div>
 		          </li>
 		          <li role="separator" class="divider"></li>
@@ -196,10 +196,17 @@
 	<!-- Arquivos necessários para o Bootstrap -->
 	<script src="{% static 'gestorbases/assets/javascripts/vendors.min.js' %}"></script>
 
+
+
 	<!-- Bloco de scripts -->
 	{% block scripts %}{% endblock %}
 
 	<!-- Scripts.js -->
 	<script src="{% static 'gestorbases/assets/javascripts/algaworks.min.js' %}"></script>
+
+	<!-- Arquivos necessários para o jquery
+	<script src="{% static 'gestorbases/jquery-3.3.1.js' %}"></script>
+	 -->
+	
 </body>
 </html>

@@ -19,22 +19,6 @@ class Person(models.Model):
 
 
 
-
-
-class Alunos(models.Model):
-    seq_geral = models.AutoField(primary_key=True)
-    matricula = models.CharField(max_length=50, blank=True, null=True)
-    nome = models.CharField(max_length=250, blank=True, null=True)
-    nome_mae = models.CharField(max_length=255, blank=True, null=True)
-
-    alunos = models.Manager()
-
-    class Meta:
-        managed = True
-        db_table = 'alunos'
-
-
-
 class Funcionario(models.Model):
 
     nome = models.CharField(

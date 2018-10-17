@@ -1,40 +1,45 @@
+# DEPENDÊNCIAS NECESSÁRIAS PARA REDIRECIONAR E RENDERIZAR TEMPLATES
 from django.urls import reverse_lazy
 from django.shortcuts import redirect
-from django.views.generic import TemplateView, ListView, UpdateView, CreateView, DeleteView, View
-from myproject.gestorbases.forms import InsereBaseForm # importa o formulário
-from myproject.gestorbases.forms import InsereTabelaForm
-from myproject.gestorbases.forms import InsereAtualizacaoForm
 from django.shortcuts import render
 from django.http import HttpResponse
-from myproject.gestorbases.models import Base, Tabela, Atualizacao
 
-from myproject.models import Alunos
 
-from django.contrib.auth.mixins import LoginRequiredMixin
+# DEPENDÊNCIAS NECESSÁRIAS PARA TEMPLATES
+from django.views.generic import TemplateView
+from django.views.generic import ListView
+from django.views.generic import UpdateView
+from django.views.generic import CreateView
+from django.views.generic import DeleteView
+from django.views.generic import View
 
-# ---------- DEPENDÊNCIAS NECESSÁRIAS PARA IMPLEMENTAR A PAGINAÇÃO ----------
+# IMPORTANDO OS FORMS DA APLICAÇÃO
+from myproject.gestorbases.forms import InsereBaseForm
+from myproject.gestorbases.forms import InsereTabelaForm
+from myproject.gestorbases.forms import InsereAtualizacaoForm
+
+# IMPORTANDO OS MODELS DA APLICAÇÃO
+from myproject.gestorbases.models import Base
+from myproject.gestorbases.models import Tabela
+from myproject.gestorbases.models import Atualizacao
+
+# DEPENDÊNCIAS NECESSÁRIAS PARA IMPLEMENTAR A PAGINAÇÃO
 from django.core.paginator import EmptyPage
 from django.core.paginator import PageNotAnInteger
 from django.core.paginator import Paginator
 
-from django.shortcuts import render
-# ---------- DEPENDÊNCIAS NECESSÁRIAS PARA IMPLEMENTAR A PAGINAÇÃO ----------
-
-
-
-
-# ########################### SISTEMA DE LOGIN ##########################
-
+# DEPENDÊNCIAS NECESSÁRIAS PARA IMPLEMENTAR A LOGIN
 from django.contrib.auth import authenticate, logout, login as authlogin
 from django.shortcuts import render_to_response
 from django.template import Context, loader, RequestContext
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.mixins import LoginRequiredMixin
 
 
+# ########################### VIEWS DE LOGIN ##########################
 def login(request):
 	if request.user.id:
 		return render(request, 'gestorbases/logado.html',{})
-
 	if request.POST:
 		usuario = request.POST.get('usuario')
 		senha = request.POST.get('senha')
@@ -47,25 +52,13 @@ def login(request):
 				#return render(request, 'gestorbases/dashboard.html',{'user': u})
 	return render(request, 'gestorbases/login.html', {})
 
-
 def sair(request):
 	logout(request)
 	return render(request, 'gestorbases/login.html', {})
-
-
 # ########################### SISTEMA DE LOGIN ##########################
 
-# Create your views here.
 
-def home(request):
-	#return HttpResponse('Index do Gestor de bases')
-	alunos = Alunos.alunos.all()
-	contexto = {'alunos': alunos}
-	return render(request, 'bases/index.html', contexto)
-
-def logado(request):
-	return render(request, 'gestorbases/logado.html',{})
-
+# RENDERIZAR O DASHBOARD
 @login_required
 def dashboard(request):
 	bases = Base.objetos.all()
@@ -75,14 +68,8 @@ def dashboard(request):
 	return render(request, 'gestorbases/dashboard.html', contexto)
 
 
-'''
-def cadastroBase(request):
-	return render(request, 'gestorbases/cadastroBase.html', {})
-'''
-
 # CADASTRAMENTO DE BASE
 # ----------------------------------------------
-
 class BaseCreateView(LoginRequiredMixin, CreateView):
     template_name = 'gestorbases/base/cadastroBase.html'
     model = Base
@@ -90,17 +77,12 @@ class BaseCreateView(LoginRequiredMixin, CreateView):
     success_url = reverse_lazy("gestorbases:lista_bases")
 
 
-# LISTAGEM DE BASES
+# LISTAGEM DE BASES COM PAGINAÇÃO
 # ----------------------------------------------
-'''
-class BaseListView(LoginRequiredMixin, ListView):
-	template_name = 'gestorbases/base/listaBases.html'
-	model = Base
-	context_object_name = 'bases'
-'''
+@login_required
 def listingBases(request):
-	bases_lista = Base.objetos.all().order_by('nome')
-	paginator = Paginator(bases_lista, 3)
+	bases_lista = Base.objetos.all().order_by('id')
+	paginator = Paginator(bases_lista, 7)
 	page = request.GET.get('page')
 	bases = paginator.get_page(page)
 	return render(request, 'gestorbases/base/listaBases.html', {'bases':bases})
@@ -126,8 +108,7 @@ class BaseDeleteView(LoginRequiredMixin, DeleteView):
 
 
 
-
-# CADASTRAMENTO DE TABELA
+# CADASTRO DE TABELA
 # ----------------------------------------------
 class TabelaCreateView(LoginRequiredMixin, CreateView):
 	template_name = 'gestorbases/tabela/cadastroTabela.html'
@@ -136,30 +117,26 @@ class TabelaCreateView(LoginRequiredMixin, CreateView):
 	success_url = reverse_lazy('gestorbases:lista_tabelas')
 
 
-# LISTAGEM DE TABELAS
+# LISTAGEM DE TABELAS COM PAGINAÇÃO
 # ----------------------------------------------
-'''
-class TabelaListView(LoginRequiredMixin, ListView):
-	template_name = 'gestorbases/tabela/listaTabelas.html'
-	model = Tabela
-	context_object_name = 'tabelas'
-'''
+@login_required
 def listingTables(request):
-		tabelas_lista = Tabela.objetos.all().order_by('nome')
+	if request.GET.get('tabela') == None:
+		tabelas_lista = Tabela.objetos.all()[:100]
+		paginator = Paginator(tabelas_lista, 7)
+		page = request.GET.get('page')
+		tabelas = paginator.get_page(page)
+		return render(request, 'gestorbases/tabela/listaTabelas.html', {'tabelas': tabelas})
+	else:
+		tab = request.GET.get('tabela')
+		tabelas_lista = Tabela.objetos.filter(nome__icontains=tab)[:100]
 		paginator = Paginator(tabelas_lista, 7)
 		page = request.GET.get('page')
 		tabelas = paginator.get_page(page)
 		return render(request, 'gestorbases/tabela/listaTabelas.html', {'tabelas': tabelas})
 
-'''
-def is_active_class(request):
-	atual = request.GET.get('atual')
-	pagina = request.GET.get('pagina')
-	retorno = ''
-	if pagina == atual:
-		retorno = 'active'
-	return retorno
-'''
+
+
 # EDIÇÃO DE TABELAS
 # ----------------------------------------------
 class TabelaUpdateView(LoginRequiredMixin, UpdateView):
@@ -201,15 +178,10 @@ class AtualizacaoCreateView(LoginRequiredMixin, CreateView):
 	success_url = reverse_lazy('gestorbases:nova_atualizacao')
 
 
-# LISTAGEM DE ATUALIZAÇÕES
+
+# FAZ PAGINAÇÃO DE ATUALIZAÇÃO
 # ----------------------------------------------
-class AtualizacaoListView(LoginRequiredMixin, ListView):	
-	template_name = 'gestorbases/atualizacao/listaAtualizacoes.html'
-	model = Atualizacao
-	context_object_name = 'atualizacoes'
-
-
-
+@login_required
 def listingAtualizacoes(request):
 	atualizacoes_lista = Atualizacao.objetos.all().order_by('pk')
 	paginator = Paginator(atualizacoes_lista, 5)
@@ -234,7 +206,8 @@ class AtualizacaoDetalhesView(LoginRequiredMixin, UpdateView):
 		return atualizacao
 
 
-
+# ATUALIZA DE REGISTRO DE ATUALIZAÇÃO
+# ----------------------------------------------
 class AtualizacaoUpdateView(LoginRequiredMixin, UpdateView):
 	template_name = 'gestorbases/atualizacao/editaAtualizacao.html'
 	model = Atualizacao
@@ -250,7 +223,7 @@ class AtualizacaoUpdateView(LoginRequiredMixin, UpdateView):
 		return atualizacao
 
 
-# EXCLUSÃO DE ATUALIZAÇÃO
+# EXCLUSÃO DE REGISTRO DE ATUALIZAÇÃO
 # ----------------------------------------------
 class AtualizacaoDeleteView(LoginRequiredMixin, DeleteView):
 	template_name = 'gestorbases/atualizacao/excluiAtualizacao.html'
@@ -263,6 +236,15 @@ class AtualizacaoDeleteView(LoginRequiredMixin, DeleteView):
 
 
 
+
+
+# ##############  VIEWS DE TESTE ####################
+from django.http import HttpResponse
+from django.core import serializers
+import json
+from django.http import Http404
+
+
 def teste(request):
 	tabelas = Tabela.objetos.all()
 	if request.POST:
@@ -272,27 +254,16 @@ def teste(request):
 	return render(request,'gestorbases/teste.html', {'tabelas':tabelas})
 
 
+def teste2(request):
+	tabela = request.GET.get('tabela') # dicionario
+	tabelas = Tabela.objetos.filter(nome__icontains=tabela)
+	tabelas = [ tabela_serializer(tabela) for tabela in tabelas]
+	#return HttpResponse(tabelas, content_type='application/json')
+	return render(request, 'gestorbases/teste.html', {'tabelas':tabelas})
 
 
-
-'''
-
-class AtualizacaoDetalhesView(LoginRequiredMixin, UpdateView):
-	template_name = 'gestorbases/atualizacao/detalhesAtualizacao.html'
-	model = Atualizacao
-	fields = '__all__'
-	context_object_name = 'atualizacao'
-
-	def get_object(self, queryset=None):
-		atualizacao = None
-		id = self.kwargs.get(self.pk_url_kwarg)
-		if id is not None:
-			atualizacao = Atualizacao.objetos.filter(id=id).first()
-		return atualizacao
-
-		usuario = request.POST.get('usuario')
-		senha = request.POST.get('senha')
-'''
+def tabela_serializer(tabela):
+	return {'id':tabela.id, 'nome': tabela.nome, 'descricao':tabela.descricao, 'esquema':tabela.esquema}
 
 
 
@@ -314,39 +285,3 @@ class AtualizacaoDetalhesView(LoginRequiredMixin, UpdateView):
 
 
 
-class AlunosListView(ListView):
-	template_name = 'bases/index.html'
-	model = Alunos
-	context_object_name = 'alunos'
-
-
-
-
-class AlunosUpdateView(UpdateView):
-	template_name = 'bases/editaAluno.html'
-	model = Alunos
-	fields = ['seq_geral', 'matricula', 'nome', 'nome_mae'] # Lista de campos disponibilizados para edição
-	context_object_name = 'aluno'
-
-	def get_object(self, queryset=None):
-		aluno = None
-		id = self.kwargs.get(self.pk_url_kwarg)
-		slug = self.kwargs.get(self.slug_url_kwarg)
-		if id is not None:
-			# Busca o aluno apartir do id
-			aluno = Alunos.alunos.filter(seq_geral=id).first()
-		elif slug is not None:
-			# Pega o campo slug do Model
-			campo_slug = self.get_slug_field()
-			# Busca o aluno apartir do slug
-			aluno = Alunos.alunos.filter(**{campo_slug: slug}).first()
-		# Retorna o objeto encontrado
-		return aluno
-
-
-# EXEMPLOS DE VIEWS BASEADAS EM FUNÇÕES (BVF)
-'''
-def listaBases(request):
-	return render(request, 'gestorbases/listaBases.html', {})
-
-'''
