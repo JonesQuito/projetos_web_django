@@ -23,27 +23,18 @@ urlpatterns = [
 	path('tabelas/exclui/<pk>', views.TabelaDeleteView.as_view(), name='exclui_tabela'),
 
 
-	path('atualizacoes/nova', views.AtualizacaoCreateView.as_view(), name='nova_atualizacao'),
+	#path('atualizacoes/nova', views.AtualizacaoCreateView.as_view(), name='nova_atualizacao'),
+	path('atualizacoes/nova2/<pk>,<tab_nome>', views.novaAtualizazao, name='nova_atualizacao2'),
+	path('atualizacoes/nova/<pk>', views.AtualizacaoCreateView2.as_view(), name='nova_atualizacao3'),
+
 	#path('atualizacoes/lista', views.AtualizacaoListView.as_view(), name='lista_atualizacoes'),
 	path('atualizacoes/lista', views.listingAtualizacoes, name='lista_atualizacoes'),
 	path('atualizacoes/detalhes/<pk>', views.AtualizacaoDetalhesView.as_view(), name='detalhes_atualizacao'),
 	path('atualizacoes/atualiza/<pk>', views.AtualizacaoUpdateView.as_view(), name='atualiza_atualizacao'),
 	path('atualizacoes/exclui/<pk>', views.AtualizacaoDeleteView.as_view(), name='exclui_atualizacao'),
 
-
-
 	path('login/', views.login, name='login'),
 	path('sair/', views.sair, name='sair'),
 
-
-
-
-
-	path('teste/', views.teste, name='teste'),
-	path('teste2/', views.teste2, name='teste2'),
-
-
-	#path('alunos/', views.AlunosListView.as_view(), name='lista_alunos'),
-	#path('atualizar/aluno/<pk>', views.AlunosUpdateView.as_view()),
     path('admin/', admin.site.urls),
 ]

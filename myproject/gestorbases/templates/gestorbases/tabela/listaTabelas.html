@@ -47,7 +47,7 @@
 									<a href="#">{{tabela.base.id}}</a>
 								</td>
 								<td data-toggle='tooltip' data-placement='top' title='Registrar nova atualização'>
-									{{tabela.nome}}
+									<a href="{% url 'gestorbases:nova_atualizacao2' pk=tabela.id tab_nome=tabela.nome %}">{{tabela.nome}}</a>
 								</td>
 
 								<td class="text-left">{{tabela.descricao}}</td>
@@ -73,7 +73,7 @@
 				</table>
 			{% else %}
                 <div class="text-center mt-5 mb-5 jumbotron">
-                   <h5>Nenhuma <code>Base</code> cadastrada ainda.</h5>
+                   <h5>Nenhuma <code>Tabela</code> encontrada.</h5>
                 </div>
             {% endif %}
 		</div>

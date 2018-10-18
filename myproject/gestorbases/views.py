@@ -171,12 +171,47 @@ class TabelaDeleteView(LoginRequiredMixin, DeleteView):
 
 # REGISTRO DE NOVA ATUALIZAÇÃO
 # ----------------------------------------------
+
 class AtualizacaoCreateView(LoginRequiredMixin, CreateView):
 	template_name = 'gestorbases/atualizacao/cadastroAtualizacao.html'
 	model = Atualizacao
+	InsereAtualizacaoForm.tabela = Tabela.objetos.all()[:5]
 	form_class = InsereAtualizacaoForm
 	success_url = reverse_lazy('gestorbases:nova_atualizacao')
 
+
+
+def novaAtualizazao(request, pk, tab_nome):
+	if request.POST:
+		tabela_id = request.POST.get('tabela')
+		tabela = Tabela.objetos.filter(id=tabela_id).first()
+		responsavel = request.POST.get('responsavel')
+		origem_dados = request.POST.get('origem_dados')
+		mes_ref = request.POST.get('mes_ref')
+		ano_ref = request.POST.get('ano_ref')
+		observacao = request.POST.get('observacao')
+		atualizacao = Atualizacao(tabela=tabela, responsavel=responsavel, observacoes=observacao, mes_ref=mes_ref, ano_ref=ano_ref, origem_dados=origem_dados)
+		atualizacao.save()
+		return redirect('gestorbases:lista_atualizacoes')
+	else:
+		context = {
+			'tabela': tab_nome, 'pk':pk
+		}
+		return render(request, 'gestorbases/atualizacao/novaAtualizacao.html', context)
+
+class AtualizacaoCreateView2(LoginRequiredMixin, CreateView):
+	template_name = 'gestorbases/atualizacao/novaAtualizacao.html'
+	model = Atualizacao
+	InsereAtualizacaoForm.tabela = Tabela.objetos.all()[:5]
+	form_class = InsereAtualizacaoForm
+	success_url = reverse_lazy('gestorbases:nova_atualizacao')
+
+	def get_object(self, queryset=None):
+		tabela = None
+		id = self.kwargs.get(self.pk_url_kwarg)
+		if id is not None:
+			tabela = Tabela.objetos.filter(id=id).first()
+		return tabela
 
 
 # FAZ PAGINAÇÃO DE ATUALIZAÇÃO
