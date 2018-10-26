@@ -39,6 +39,6 @@ Se tudo tiver ocorrido sem erros, agora estamos prontos para inicir nosso servid
 O comando a seguir vai iniciar o servidor no seu ip público na porta 8000
 
 ### INICIANDO O SERVIDOR
-´python manage.py runserver 0.0.0.0:8000´
+`python manage.py runserver 0.0.0.0:8000`
 
 Agora basta acessar seu_ip:8000/gestorbases. 
