@@ -34,6 +34,8 @@ from django.shortcuts import render_to_response
 from django.template import Context, loader, RequestContext
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.models import User
+
 
 
 # ########################### VIEWS DE LOGIN ##########################
@@ -61,11 +63,12 @@ def sair(request):
 # RENDERIZAR O DASHBOARD
 @login_required
 def dashboard(request):
-	bases = Base.objetos.all()
-	tabelas = Tabela.objetos.all()
-	atualizacoes = Atualizacao.objetos.all()
-	contexto = {'tabelas': tabelas, 'bases': bases, 'atualizacoes': atualizacoes}
-	return render(request, 'gestorbases/dashboard.html', contexto)
+	if request.user.is_authenticated:
+		bases = Base.objetos.all()
+		tabelas = Tabela.objetos.all()
+		atualizacoes = Atualizacao.objetos.all()
+		contexto = {'tabelas': tabelas, 'bases': bases, 'atualizacoes': atualizacoes}
+		return render(request, 'gestorbases/dashboard.html', contexto)
 
 
 # CADASTRAMENTO DE BASE
@@ -75,6 +78,7 @@ class BaseCreateView(LoginRequiredMixin, CreateView):
     model = Base
     form_class = InsereBaseForm
     success_url = reverse_lazy("gestorbases:lista_bases")
+
 
 
 # LISTAGEM DE BASES COM PAGINAÇÃO
