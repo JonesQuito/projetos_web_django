@@ -4,16 +4,16 @@
 
 
 ### INSTALAR O VIRTUALENV VIA PIP
-´pip install virtualenv´ 
+`pip install virtualenv` 
 
 ### CRIAR UM AMBINETE VIRTUAL
-´virtualenv nome_do_ambiente´
+`virtualenv nome_do_ambiente`
 
 ### CLONAR O PROJETO DENTRO DO AMBINETE VIRTUAL CRIADO (USAR O GIT BASH)
-´git clone https://github.com/JonesQuito/projetos_web_django.git´
+`git clone https://github.com/JonesQuito/projetos_web_django.git`
 
 ### INSTALAR AS BIBLIOTECAS REQUERIDAS PARA O PROJETO
-(de dentro da pasta clonada executar) ´pip install -r requirements.txt´
+(de dentro da pasta clonada executar) `pip install -r requirements.txt`
 
 
 O sistema faz acesso a um bonco postgres. A configuração padrão de acesso ao banco assume que existe um banco de
@@ -22,15 +22,16 @@ com essas especificações ou acesse o arquivo de configução - myproject/setti
 acessar o banco que você deseja. Após verificar essas informações execute as etapas a baixo para por o projeto em execução.
 
 ### CRIANDO UMA MIGAÇÃO PARA O SISTEMA
-´python manage.py makemigrations´
+`python manage.py makemigrations`
 
 ### APLICANDO A MIGRAÇÃO NO BANCO DE DADOS
-´python manage.py migrate´
+`python manage.py migrate`
 
 Agora devemos criar um usuário para acessar a aplicação e gerenciar os demais usuários. Para isso vamos usar o comando
 do Django exibido a baixo. Posteriormente podemos criar e gerenciar novos usuários no admin do django acessando
 ´seu_ip:8000/admin´
-- ´django-admin createsuperuser´
+- `django-admin createsuperuser`
+
 
 
 
