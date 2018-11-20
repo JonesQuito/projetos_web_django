@@ -30,7 +30,7 @@ acessar o banco que você deseja. Após verificar essas informações execute as
 Agora devemos criar um usuário para acessar a aplicação e gerenciar os demais usuários. Para isso vamos usar o comando
 do Django exibido a baixo. Posteriormente podemos criar e gerenciar novos usuários no admin do django acessando
 ´seu_ip:8000/admin´
-- `django-admin createsuperuser`
+- `python manage.py createsuperuser`
 
 
 
