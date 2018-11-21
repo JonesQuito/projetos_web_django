@@ -222,49 +222,72 @@ class AtualizacaoCreateView2(LoginRequiredMixin, CreateView):
 # ----------------------------------------------
 @login_required
 def listingAtualizacoes(request):
-	# codigo original
-	'''
+	if request.GET.get('tabela') != None and request.GET.get('data') != None:
+		tab = request.GET.get('tabela')
+		date = request.GET.get('data')
+		atualizacoes = getUpdateByTableAndDate(request, tab, date)
+		return render(request, 'gestorbases/atualizacao/listaAtualizacoes.html', {'atualizacoes': atualizacoes})
+	elif request.GET.get('tabela') != None:
+		tab = request.GET.get('tabela')
+		atualizacoes = getUpdateByTables(request, tab)
+		return render(request, 'gestorbases/atualizacao/listaAtualizacoes.html', {'atualizacoes': atualizacoes})
+	elif request.GET.get('tabela') == None:		
+		atualizacoes = getAllUpdates(request)
+		return render(request, 'gestorbases/atualizacao/listaAtualizacoes.html', {'atualizacoes': atualizacoes})
+	else:
+		tab = request.GET.get('tabela')
+		date = request.GET.get('data')
+		atualizacoes = getUpdateByTableAndDate(request, tab, date)
+		#atualizacoes = getUpdateByTables(request, tab)
+		return render(request, 'gestorbases/atualizacao/listaAtualizacoes.html', {'atualizacoes': atualizacoes})
+	
+
+def getAllUpdates(request):
 	atualizacoes_lista = Atualizacao.objetos.all().order_by('pk')
 	paginator = Paginator(atualizacoes_lista, 5)
 	page = request.GET.get('page')
-	atualizacoes = paginator.get_page(page)
-	return render(request, 'gestorbases/atualizacao/listaAtualizacoes.html', {'atualizacoes': atualizacoes})
-	'''
-	# codigo original
-	if request.GET.get('tabela') == None:
-		atualizacoes_lista = Atualizacao.objetos.all().order_by('pk')
-		paginator = Paginator(atualizacoes_lista, 7)
-		page = request.GET.get('page')
-		atualizacoes = paginator.get_page(page)
-		return render(request, 'gestorbases/atualizacao/listaAtualizacoes.html', {'atualizacoes': atualizacoes})
-	
-	else:
-		tab = request.GET.get('tabela')
-		tabelas = Tabela.objetos.filter(nome__icontains=tab)
-		condicao = ''
-		for tabela in tabelas:
-			if condicao != '':
-				condicao = condicao + ', ' + str(tabela.id)
-			else:
-				condicao = condicao + str(tabela.id)
-		condicao = "(" + condicao + ")"
-		atualizacoes_lista = Atualizacao.objetos.raw("select * from gestorbases_atualizacao where tabela_id in " + condicao)
-		paginator = Paginator(atualizacoes_lista, 7)
-		page = request.GET.get('page')
-		atualizacoes = paginator.get_page(page)
-		return render(request, 'gestorbases/atualizacao/listaAtualizacoes.html', {'atualizacoes': atualizacoes})
+	return paginator.get_page(page)
 
-		#context_object_name = {'tabelas': tabelas, 'condicao': condicao, 'atualizacoes': atualizacoes} 
-		#return render(request, 'gestorbases/atualizacao/teste.html', context_object_name)
+def getUpdateByTables(request, tab):
+	tabelas = Tabela.objetos.filter(nome__icontains=tab)
+	condicao = ''
+	for tabela in tabelas:
+		if condicao != '':
+			condicao = condicao + ', ' + str(tabela.id)
+		else:
+			condicao = condicao + str(tabela.id)
+	condicao = "(" + condicao + ")"
+	if condicao == '()':
+		condicao = '(-1)'
+	atualizacoes_lista = Atualizacao.objetos.raw("select * from gestorbases_atualizacao where tabela_id in " + condicao)
+	paginator = Paginator(atualizacoes_lista, 5)
+	page = request.GET.get('page')
+	return paginator.get_page(page)
+'''
+def getUpdateByDate(request, date):
+	date = "'" + date + "'"
+	atualizacoes_lista = Atualizacao.objetos.raw("select * from gestorbases_atualizacao where data_atualizacao >= " + date)
+'''
+def getUpdateByTableAndDate(request, tab, date):
+	tabelas = Tabela.objetos.filter(nome__icontains=tab)
+	condicao = ''
+	for tabela in tabelas:
+		if condicao != '':
+			condicao = condicao + ', ' + str(tabela.id)
+		else:
+			condicao = condicao + str(tabela.id)
+	condicao = "(" + condicao + ")"
+	if condicao == '()':
+		condicao = '(-1)'
+	if date == '':
+		date = '01/01/1970'
 
-		'''
-		tab = request.GET.get('tabela')
-		tabelas_lista = Tabela.objetos.filter(nome__icontains=tab)[:100]
-		paginator = Paginator(tabelas_lista, 7)
-		page = request.GET.get('page')
-		tabelas = paginator.get_page(page)
-		return render(request, 'gestorbases/tabela/listaTabelas.html', {'tabelas': tabelas})
-		'''
+	sql = "select * from gestorbases_atualizacao where tabela_id in " + condicao + " and data_atualizacao >= '" + date + "'"
+	atualizacoes_lista = Atualizacao.objetos.raw(sql)
+	paginator = Paginator(atualizacoes_lista, 5)
+	page = request.GET.get('page')
+	return paginator.get_page(page)
+
 
 # DETALHAMENTO DE ATUALIZAÇÃO
 # ----------------------------------------------

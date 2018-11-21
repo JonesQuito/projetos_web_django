@@ -14,13 +14,21 @@
 	<div class="container-fluid">
 		<div class="row">
 			<form method="get" action="#">
-		        <div class="col-sm-6">
+		        <div class="col-sm-3">
 			          <div class="form-group">
-			            <input type="text" name="tabela" class="form-control xs ">
+			          	<label>Tabela</label>
+			            <input type="text" name="tabela" class="form-control xs" placeholder="Nome da tabela">
 			          </div>
 		        </div>
-		        <div class="col-sm-6">
+		        <div class="col-sm-2">
+			          <div class="form-group">
+			          	<label>Atualizada após</label>
+			            <input type="date" name="data" class="form-control xs">
+			          </div>
+		        </div>
+		        <div class="col-sm-3">
 		        	<div class="form-group">
+		        		<br>
 			            <input type="submit" value="buscar" class="btn btn-primary">
 			         </div>
 		        </div>
@@ -33,8 +41,8 @@
 						<tr>
 							<th>Tabela</th>
 							<th>Data atualização</th>
-							<th>mes_ref</th>
-							<th>ano_ref</th>
+							<th>Mês_Ref</th>
+							<th>Ano_Ref</th>
 							<th>Responsável</th>
 							<th class="text-center">Editar</th>
 							<th class="text-center">Excluir</th>
