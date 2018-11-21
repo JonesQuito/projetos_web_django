@@ -222,12 +222,49 @@ class AtualizacaoCreateView2(LoginRequiredMixin, CreateView):
 # ----------------------------------------------
 @login_required
 def listingAtualizacoes(request):
+	# codigo original
+	'''
 	atualizacoes_lista = Atualizacao.objetos.all().order_by('pk')
 	paginator = Paginator(atualizacoes_lista, 5)
 	page = request.GET.get('page')
 	atualizacoes = paginator.get_page(page)
 	return render(request, 'gestorbases/atualizacao/listaAtualizacoes.html', {'atualizacoes': atualizacoes})
+	'''
+	# codigo original
+	if request.GET.get('tabela') == None:
+		atualizacoes_lista = Atualizacao.objetos.all().order_by('pk')
+		paginator = Paginator(atualizacoes_lista, 7)
+		page = request.GET.get('page')
+		atualizacoes = paginator.get_page(page)
+		return render(request, 'gestorbases/atualizacao/listaAtualizacoes.html', {'atualizacoes': atualizacoes})
+	
+	else:
+		tab = request.GET.get('tabela')
+		tabelas = Tabela.objetos.filter(nome__icontains=tab)
+		condicao = ''
+		for tabela in tabelas:
+			if condicao != '':
+				condicao = condicao + ', ' + str(tabela.id)
+			else:
+				condicao = condicao + str(tabela.id)
+		condicao = "(" + condicao + ")"
+		atualizacoes_lista = Atualizacao.objetos.raw("select * from gestorbases_atualizacao where tabela_id in " + condicao)
+		paginator = Paginator(atualizacoes_lista, 7)
+		page = request.GET.get('page')
+		atualizacoes = paginator.get_page(page)
+		return render(request, 'gestorbases/atualizacao/listaAtualizacoes.html', {'atualizacoes': atualizacoes})
 
+		#context_object_name = {'tabelas': tabelas, 'condicao': condicao, 'atualizacoes': atualizacoes} 
+		#return render(request, 'gestorbases/atualizacao/teste.html', context_object_name)
+
+		'''
+		tab = request.GET.get('tabela')
+		tabelas_lista = Tabela.objetos.filter(nome__icontains=tab)[:100]
+		paginator = Paginator(tabelas_lista, 7)
+		page = request.GET.get('page')
+		tabelas = paginator.get_page(page)
+		return render(request, 'gestorbases/tabela/listaTabelas.html', {'tabelas': tabelas})
+		'''
 
 # DETALHAMENTO DE ATUALIZAÇÃO
 # ----------------------------------------------
