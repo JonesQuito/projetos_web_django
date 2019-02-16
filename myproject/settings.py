@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'myproject.gestorbases',
     'myproject.website',
     'widget_tweaks',
+    'rest_framework',
 ]
 
 MIDDLEWARE = [
