@@ -36,6 +36,9 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.models import User
 
+# DEPENDÊNCIAS NECESSÁRIAS PARA SERIALIZAR DADOS EM JSON
+import json
+
 
 
 # ########################### VIEWS DE LOGIN ##########################
@@ -226,20 +229,24 @@ def listingAtualizacoes(request):
 		tab = request.GET.get('tabela')
 		date = request.GET.get('data')
 		atualizacoes = getUpdateByTableAndDate(request, tab, date)
-		return render(request, 'gestorbases/atualizacao/listaAtualizacoes.html', {'atualizacoes': atualizacoes})
+		contexto = {'atualizacoes': atualizacoes, 'nomeTabela':tab, 'data':date}
+		return render(request, 'gestorbases/atualizacao/listaAtualizacoes.html', contexto)
 	elif request.GET.get('tabela') != None:
 		tab = request.GET.get('tabela')
 		atualizacoes = getUpdateByTables(request, tab)
-		return render(request, 'gestorbases/atualizacao/listaAtualizacoes.html', {'atualizacoes': atualizacoes})
+		contexto = {'atualizacoes': atualizacoes, 'nomeTabela':tab}
+		return render(request, 'gestorbases/atualizacao/listaAtualizacoes.html', contexto)
 	elif request.GET.get('tabela') == None:		
 		atualizacoes = getAllUpdates(request)
-		return render(request, 'gestorbases/atualizacao/listaAtualizacoes.html', {'atualizacoes': atualizacoes})
+		contexto = {'atualizacoes': atualizacoes}
+		return render(request, 'gestorbases/atualizacao/listaAtualizacoes.html', contexto)
 	else:
 		tab = request.GET.get('tabela')
 		date = request.GET.get('data')
 		atualizacoes = getUpdateByTableAndDate(request, tab, date)
 		#atualizacoes = getUpdateByTables(request, tab)
-		return render(request, 'gestorbases/atualizacao/listaAtualizacoes.html', {'atualizacoes': atualizacoes})
+		contexto = {'atualizacoes': atualizacoes, 'nomeTabela':tab, 'data':date}
+		return render(request, 'gestorbases/atualizacao/listaAtualizacoes.html', contexto)
 	
 
 def getAllUpdates(request):
@@ -263,6 +270,28 @@ def getUpdateByTables(request, tab):
 	paginator = Paginator(atualizacoes_lista, 5)
 	page = request.GET.get('page')
 	return paginator.get_page(page)
+
+
+
+def getAtualizacoes(request):
+	from django.db import connection
+	atualizacoes = []
+	cursor = connection.cursor()
+	cursor.execute("select to_char(data_atualizacao, 'DD/MM/yyyy'), count(*) from gestorbases_atualizacao where data_atualizacao > current_date - INTERVAL '365 DAYS' group by data_atualizacao order by data_atualizacao")
+	for atualizacao in cursor:
+		atualizacoes.append(atualizacao)
+
+
+	if request.is_ajax():
+		contexto = {'atualizacoes':atualizacoes}
+		return HttpResponse(json.dumps(contexto), content_type='application/json')
+	else:
+		for atualizacao in atualizacoes:
+			print(atualizacao)
+		contexto = {'atualizacoes': atualizacoes}
+		return HttpResponse(json.dumps(contexto), content_type='application/json')
+
+	
 '''
 def getUpdateByDate(request, date):
 	date = "'" + date + "'"
@@ -330,7 +359,6 @@ class AtualizacaoDeleteView(LoginRequiredMixin, DeleteView):
 	fields = '__all__'
 	context_object_name = 'atualizacao'
 	success_url = reverse_lazy('gestorbases:lista_atualizacoes')
-
 
 
 

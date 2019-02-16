@@ -33,6 +33,8 @@ urlpatterns = [
 	path('atualizacoes/atualiza/<pk>', views.AtualizacaoUpdateView.as_view(), name='atualiza_atualizacao'),
 	path('atualizacoes/exclui/<pk>', views.AtualizacaoDeleteView.as_view(), name='exclui_atualizacao'),
 
+	path('atualizacoes/chart', views.getAtualizacoes, name='atualizacoes_chart'),
+
 	path('login/', views.login, name='login'),
 	path('sair/', views.sair, name='sair'),
 
